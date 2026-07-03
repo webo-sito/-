@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="ar" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Omar Soliman — Web Design & Development</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" media="print" onload="this.media='all'">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f2f2f0;
+    --card: #ffffff;
+    --card2: #ebebeb;
+    --text: #0a0a0a;
+    --muted: #6b6b6b;
+    --accent: #0a0a0a;
+    --radius: 20px;
+    --radius-sm: 12px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── STICKY NAV ── */
+  .nav {
+    position: fixed;
+    top: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    background: rgba(255,255,255,0.92);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-radius: 100px;
+    padding: 10px 16px 10px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    width: calc(100% - 32px);
+    max-width: 500px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+  }
+
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .nav-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    object-fit: cover;
+    object-position: center top;
+    border: 2px solid #e5e5e5;
+  }
+
+  .nav-name {
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.3px;
+  }
+
+  .nav-btn {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    text-decoration: none;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+  }
+  .nav-btn:hover { transform: scale(1.08); }
+  .nav-btn svg { width: 16px; height: 16px; stroke: white; fill: none; stroke-width: 2; }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 100px 16px 60px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* ── HERO ── */
+  .hero-section {
+    padding: 20px 0 10px;
+    text-align: center;
+  }
+
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: white;
+    border-radius: 100px;
+    padding: 6px 14px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 20px;
+  }
+
+  .hero-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #22c55e;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.8); }
+  }
+
+  .hero-title {
+    font-size: clamp(36px, 9vw, 48px);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+    color: var(--text);
+  }
+
+  .hero-title em {
+    font-style: normal;
+    color: #3b3b3b;
+  }
+
+  .hero-sub {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.6;
+    max-width: 340px;
+    margin: 0 auto 28px;
+  }
+
+  .cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--accent);
+    color: white;
+    border-radius: 100px;
+    padding: 12px 22px 12px 12px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+  .cta-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,0.2); }
+
+  .cta-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 2px solid rgba(255,255,255,0.3);
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  /* ── STACK CARDS (fan animation) ── */
+  .stack-container {
+    position: relative;
+    height: 300px;
+    margin: 10px 0;
+  }
+
+  .stack-card {
+    position: absolute;
+    width: 88%;
+    left: 6%;
+    height: 250px;
+    border-radius: var(--radius);
+    overflow: hidden;
+    transform-origin: center bottom;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    cursor: pointer;
+  }
+
+  .stack-card:nth-child(1) {
+    transform: rotate(-6deg) translateY(20px);
+    z-index: 1;
+    background: #d4d4d4;
+  }
+  .stack-card:nth-child(2) {
+    transform: rotate(-2deg) translateY(10px);
+    z-index: 2;
+    background: #e8e8e8;
+  }
+  .stack-card:nth-child(3) {
+    transform: rotate(0deg) translateY(0px);
+    z-index: 3;
+  }
+
+  .stack-container:hover .stack-card:nth-child(1) {
+    transform: rotate(-12deg) translateY(30px);
+  }
+  .stack-container:hover .stack-card:nth-child(2) {
+    transform: rotate(-4deg) translateY(15px);
+  }
+  .stack-container:hover .stack-card:nth-child(3) {
+    transform: rotate(2deg) translateY(0);
+  }
+
+  .stack-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .stack-label {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    background: rgba(255,255,255,0.88);
+    backdrop-filter: blur(8px);
+    border-radius: 100px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* ── SECTION HEADER ── */
+  .section-eyebrow {
+    display: inline-block;
+    background: white;
+    border: 1px solid #e5e5e5;
+    border-radius: 100px;
+    padding: 5px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    margin-bottom: 14px;
+  }
+
+  .section-title {
+    font-size: clamp(28px, 7vw, 36px);
+    font-weight: 900;
+    letter-spacing: -1.5px;
+    line-height: 1.1;
+    margin-bottom: 10px;
+  }
+
+  .section-sub {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
+
+  /* ── SERVICE CARDS ── */
+  .service-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: transform 0.3s;
+  }
+  .service-card:hover { transform: translateY(-3px); }
+
+  .service-img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .service-card:hover .service-img {
+    transform: scale(1.05);
+  }
+
+  .service-card-body {
+    padding: 22px 22px 26px;
+  }
+
+  .service-card-title {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.8px;
+    margin-bottom: 8px;
+  }
+
+  .service-card-desc {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.65;
+  }
+
+  /* ── ZOOM HERO IMAGE ── */
+  .zoom-section {
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    height: 420px;
+  }
+
+  .zoom-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    transform: scale(1);
+    transition: transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: transform;
+  }
+
+  .zoom-section.zoomed .zoom-img {
+    transform: scale(1.18);
+  }
+
+  /* ── PORTFOLIO CARDS ── */
+  .portfolio-card {
+    background: var(--card);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .portfolio-img-wrap {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .portfolio-img {
+    width: 100%;
+    height: 240px;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+  .portfolio-card:hover .portfolio-img { transform: scale(1.04); }
+
+  .portfolio-tag {
+    position: absolute;
+    bottom: 14px;
+    left: 14px;
+    background: rgba(255,255,255,0.85);
+    backdrop-filter: blur(8px);
+    border-radius: 100px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .portfolio-body {
+    padding: 16px 20px 20px;
+  }
+
+  .portfolio-title {
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .portfolio-title span {
+    font-weight: 400;
+    color: var(--muted);
+  }
+
+  /* ── TESTIMONIAL ── */
+  .testimonial-section {
+    background: white;
+    border-radius: var(--radius);
+    padding: 40px 28px;
+    text-align: center;
+  }
+
+  .stars {
+    font-size: 22px;
+    margin-bottom: 20px;
+    letter-spacing: 2px;
+  }
+
+  .testimonial-quote {
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.35;
+    letter-spacing: -0.5px;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .testimonial-author {
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 16px;
+  }
+
+  .testimonial-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin: 0 auto;
+    display: block;
+    border: 2px solid #e5e5e5;
+  }
+
+  /* ── CONTACT ── */
+  .contact-section {
+    background: var(--card2);
+    border-radius: var(--radius);
+    padding: 32px 24px;
+  }
+
+  .contact-title {
+    font-size: 32px;
+    font-weight: 900;
+    letter-spacing: -1.2px;
+    margin-bottom: 8px;
+  }
+
+  .contact-sub {
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .contact-input {
+    width: 100%;
+    background: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text);
+    margin-bottom: 10px;
+    outline: none;
+    transition: box-shadow 0.2s;
+  }
+  .contact-input:focus { box-shadow: 0 0 0 2px rgba(0,0,0,0.15); }
+  .contact-input::placeholder { color: #b0b0b0; }
+
+  textarea.contact-input {
+    height: 120px;
+    resize: none;
+  }
+
+  .send-btn {
+    width: 100%;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-sm);
+    padding: 16px;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    margin-top: 4px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .send-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.2); }
+
+  /* ── FOOTER PHOTO ── */
+  .footer-photo {
+    border-radius: var(--radius);
+    overflow: hidden;
+    position: relative;
+    height: 320px;
+  }
+
+  .footer-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 20%;
+  }
+
+  .footer-overlay-btn {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 100px;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    font-weight: 600;
+    font-size: 14px;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+  .footer-overlay-btn:hover { background: rgba(255,255,255,0.3); }
+
+  /* ── SCROLL REVEAL ── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── ABOUT ── */
+  .about-section {
+    background: white;
+    border-radius: var(--radius);
+    padding: 32px 24px;
+  }
+
+  .about-title {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    margin-bottom: 14px;
+  }
+
+  .about-text {
+    font-size: 15px;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+  }
+
+  .about-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .stat-box {
+    background: var(--bg);
+    border-radius: var(--radius-sm);
+    padding: 16px;
+  }
+
+  .stat-num {
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -1px;
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <img class="nav-avatar" src="/mnt/user-data/uploads/1000542322.jpg" alt="Omar Soliman">
+    <span class="nav-name">Omar Soliman</span>
+  </div>
+  <a href="https://wa.me/201112252214" target="_blank" class="nav-btn" title="WhatsApp">
+    <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+  </a>
+</nav>
+
+<div class="container">
+
+  <!-- HERO -->
+  <section class="hero-section reveal">
+    <div class="hero-badge">
+      <span class="hero-dot"></span>
+      Available for projects
+    </div>
+    <h1 class="hero-title">Design that<br><em>commands</em><br>attention.</h1>
+    <p class="hero-sub">I build high-quality websites and visual identities for businesses and projects that want to stand out.</p>
+    <a href="https://wa.me/201112252214" target="_blank" class="cta-btn">
+      <img class="cta-avatar" src="/mnt/user-data/uploads/1000542322.jpg" alt="Omar">
+      Talk to me on WhatsApp
+    </a>
+  </section>
+
+  <!-- FAN STACK -->
+  <div class="stack-container reveal">
+    <div class="stack-card">
+      <img src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=600&q=80" alt="project">
+      <span class="stack-label">Web Design</span>
+    </div>
+    <div class="stack-card">
+      <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&q=80" alt="project">
+      <span class="stack-label">Branding</span>
+    </div>
+    <div class="stack-card">
+      <img src="https://images.unsplash.com/photo-1555421689-491a97ff2040?w=600&q=80" alt="project">
+      <span class="stack-label">Development</span>
+    </div>
+  </div>
+
+  <!-- ZOOM PHOTO -->
+  <div class="zoom-section reveal" id="zoomSection">
+    <img class="zoom-img" src="/mnt/user-data/uploads/1000558099.jpg" alt="Omar Soliman" id="zoomImg">
+  </div>
+
+  <!-- SERVICES -->
+  <div class="reveal">
+    <span class="section-eyebrow">Services</span>
+    <h2 class="section-title">What I Bring<br>to the Table</h2>
+    <p class="section-sub">End-to-end digital services designed to make your business impossible to ignore.</p>
+  </div>
+
+  <div class="service-card reveal">
+    <img class="service-img" src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=700&q=80" alt="Web Design">
+    <div class="service-card-body">
+      <h3 class="service-card-title">Website Design</h3>
+      <p class="service-card-desc">Conversion-focused websites that look sharp and perform. Clean layouts, strategic CTAs, and responsive design that turns visitors into customers.</p>
+    </div>
+  </div>
+
+  <div class="service-card reveal">
+    <img class="service-img" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=700&q=80" alt="Branding">
+    <div class="service-card-body">
+      <h3 class="service-card-title">Brand Identity</h3>
+      <p class="service-card-desc">Visual identities built from the ground up. Logo, color system, typography — everything a brand needs to be recognized and remembered.</p>
+    </div>
+  </div>
+
+  <div class="service-card reveal">
+    <img class="service-img" src="https://images.unsplash.com/photo-1555421689-491a97ff2040?w=700&q=80" alt="Development">
+    <div class="service-card-body">
+      <h3 class="service-card-title">Web Development</h3>
+      <p class="service-card-desc">Fast, clean, production-ready code. From static landing pages to full web applications — built to load fast and scale.</p>
+    </div>
+  </div>
+
+  <!-- PORTFOLIO -->
+  <div class="reveal">
+    <span class="section-eyebrow">Selected Work</span>
+    <h2 class="section-title">Projects That Speak<br>for Themselves</h2>
+    <p class="section-sub">A curated selection of work that drove real results for real businesses.</p>
+  </div>
+
+  <div class="portfolio-card reveal">
+    <div class="portfolio-img-wrap">
+      <img class="portfolio-img" src="https://images.unsplash.com/photo-1467232004584-a241de8bcf5d?w=700&q=80" alt="Project">
+      <span class="portfolio-tag">Web Design</span>
+    </div>
+    <div class="portfolio-body">
+      <p class="portfolio-title">Local Business Website. <span>Restaurant landing page that increased bookings by 3x.</span></p>
+    </div>
+  </div>
+
+  <div class="portfolio-card reveal">
+    <div class="portfolio-img-wrap">
+      <img class="portfolio-img" src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=700&q=80" alt="Project">
+      <span class="portfolio-tag">Branding</span>
+    </div>
+    <div class="portfolio-body">
+      <p class="portfolio-title">Brand Identity. <span>Complete visual system for a Port Said startup.</span></p>
+    </div>
+  </div>
+
+  <!-- TESTIMONIAL -->
+  <div class="testimonial-section reveal">
+    <div class="stars">★★★★★</div>
+    <p class="testimonial-quote">"Omar delivered exactly what we needed. The website looked premium and got us real results from day one."</p>
+    <p class="testimonial-author">Ahmed Hassan — Owner, Local Business</p>
+    <img class="testimonial-avatar" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&q=80" alt="client">
+  </div>
+
+  <!-- ABOUT -->
+  <div class="about-section reveal">
+    <h2 class="about-title">About Me</h2>
+    <p class="about-text">I'm Omar Soliman, a web designer and developer based in Port Said. I help local businesses and startups build a powerful online presence through high-quality design and clean code.</p>
+    <div class="about-stats">
+      <div class="stat-box">
+        <span class="stat-num">20+</span>
+        <span class="stat-label">Projects delivered</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">100%</span>
+        <span class="stat-label">Client satisfaction</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">Fast</span>
+        <span class="stat-label">Delivery time</span>
+      </div>
+      <div class="stat-box">
+        <span class="stat-num">⚡</span>
+        <span class="stat-label">High performance code</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <div class="contact-section reveal">
+    <span class="section-eyebrow">Get in Touch</span>
+    <h2 class="contact-title">Let's Build<br>Together</h2>
+    <p class="contact-sub">Have a project in mind? Message me and I'll get back to you within 24 hours.</p>
+    <input class="contact-input" type="text" placeholder="Your name">
+    <input class="contact-input" type="text" placeholder="Your WhatsApp number">
+    <textarea class="contact-input" placeholder="Tell me about your project..."></textarea>
+    <button class="send-btn" onclick="sendWhatsApp()">Send via WhatsApp</button>
+  </div>
+
+  <!-- FOOTER PHOTO -->
+  <div class="footer-photo reveal">
+    <img src="/mnt/user-data/uploads/1000542322.jpg" alt="Omar Soliman">
+    <a href="https://wa.me/201112252214" target="_blank" class="footer-overlay-btn">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m8 21 4-4 4 4"/><path d="M2 17h20"/></svg>
+      Book a Call
+    </a>
+  </div>
+
+</div>
+
+<script>
+// ── SCROLL REVEAL ──
+const reveals = document.querySelectorAll('.reveal');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), 80);
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12 });
+reveals.forEach(el => observer.observe(el));
+
+// ── ZOOM ON SCROLL ──
+const zoomSection = document.getElementById('zoomSection');
+const zoomImg = document.getElementById('zoomImg');
+
+const zoomObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      // Zoom in when entering view
+      setTimeout(() => zoomSection.classList.add('zoomed'), 100);
+    } else {
+      // Zoom out when leaving view
+      zoomSection.classList.remove('zoomed');
+    }
+  });
+}, { threshold: 0.3 });
+
+zoomObserver.observe(zoomSection);
+
+// ── WHATSAPP SEND ──
+function sendWhatsApp() {
+  const name = document.querySelectorAll('.contact-input')[0].value;
+  const phone = document.querySelectorAll('.contact-input')[1].value;
+  const msg = document.querySelectorAll('.contact-input')[2].value;
+  if (!name || !msg) { alert('Please fill in your name and project details.'); return; }
+  const text = `Hello Omar! My name is ${name}.\n\n${msg}`;
+  window.open(`https://wa.me/201112252214?text=${encodeURIComponent(text)}`, '_blank');
+}
+</script>
+
+</body>
+</html>
